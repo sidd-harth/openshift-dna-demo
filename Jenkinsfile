@@ -64,9 +64,9 @@ pipeline {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
 
-    sh 'oc project ${DEV_NAME}'
+    bat "oc project ${DEV_NAME}"
 
-   sh 'oc delete all --all'
+  bat "oc delete all -l app=${APP_NAME}"
      // clean up. keep the imagestream
      //sh 'oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${DEV_NAME}'
 
@@ -75,7 +75,7 @@ pipeline {
 	              
 
 
-   sh 'oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true'
+   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true"
    }
   }
 
@@ -83,22 +83,22 @@ pipeline {
    steps {
     //sh "pwd" 
     //sh " curl -O -X GET -u admin:admin123 http://localhost:8081/repository/snapshot/com/openshift/test/openshift-jenkins/0.0.1-SNAPSHOT/openshift-jenkins-0.0.1-20180214.210246-15.jar "
-    sh "rm -rf oc-build && mkdir -p oc-build/deployments"
+    bat "rm -rf oc-build && mkdir -p oc-build/deployments"
    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
-	sh "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
+	bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
 
-    sh 'oc start-build ${APP_NAME} --from-dir=oc-build --wait=true  --follow'
+    bat "oc start-build ${APP_NAME} --from-dir=oc-build --wait=true  --follow"
    }
   }
   stage('Deploy in Development') {
    steps {
     //sh 'oc new-app ${APP_NAME}'
-    sh '''oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | \
-        oc apply --filename -'''
+    bat """oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | \
+        oc apply --filename -"""
     // create service from github raw
-    sh 'oc create svc -f $WORKSPACE/service.json'  
-    sh 'oc expose svc/${APP_NAME}'
-    sh 'sleep 60s'
+    bat "oc create svc -f $WORKSPACE/service.json"
+    bat "oc expose svc/${APP_NAME}"
+    bat "sleep 60s"
    }
   }
   stage('Integration Tests') {
@@ -106,11 +106,11 @@ pipeline {
     parallel(
      "Status Code": {
       // sh 'sleep 20s'
-      sh "curl -I -s -L http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/api/info | grep 200"
+      bat "curl -I -s -L http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/api/info | grep 200"
      },
      "Content String": {
       // sh 'sleep 20s'
-      sh "curl -s http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/check | grep 'Service UP & RUNNING!'"
+      bat "curl -s http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/check | grep 'Service UP & RUNNING!'"
      }
     )
    }
@@ -126,21 +126,21 @@ pipeline {
   stage('Deploy in Production') {
    steps {
     // tag for stage
-    sh "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
+    bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
      // clean up. keep the imagestream
-   // sh 'oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}'
+    bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
      // deploy stage image
-    sh "oc project ${PROD_NAME}"
-    sh '''oc new-app ${APP_NAME}:${env.BUILD_ID} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -'''
+    bat "oc project ${PROD_NAME}"
+    bat """oc new-app ${APP_NAME}:${env.BUILD_ID} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -"""
      // create service from github raw
-    sh 'oc create svc -f $WORKSPACE/service.json'
-    sh 'oc expose svc/${APP_NAME} -n ${PROD_NAME}'
+    bat "oc create svc -f $WORKSPACE/service.json"
+    bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
   }
 
   stage('Scaling Application') {
    steps {
-    sh ' oc scale --replicas=${SCALE_APP} dc ${APP_NAME} -n ${PROD_NAME}'
+    bat "oc scale --replicas=${SCALE_APP} dc ${APP_NAME} -n ${PROD_NAME}"
    }
   }
 
