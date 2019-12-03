@@ -1,0 +1,166 @@
+{
+  "apiVersion": "v1",
+  "kind": "Template",
+  "metadata": {
+    "name": "template",
+    "annotations": {
+      "description": "Description"
+    }
+  },
+  "objects": [
+    
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "openshift-mysql",
+        "creationTimestamp": null,
+        "labels": {
+          "app": "openshift-mysql"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "resources": {
+            
+          }
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "openshift-mysql"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "openshift-mysql:latest"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "openshift-mysql",
+          "deploymentconfig": "openshift-mysql"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "openshift-mysql",
+              "deploymentconfig": "openshift-mysql"
+            },
+            "annotations": {
+              "openshift.io/generated-by": "OpenShiftNewApp"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "openshift-mysql",
+                "image": "openshift-mysql:latest",
+                "ports": [
+                  {
+                    "containerPort": 8778,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 8443,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  
+                },
+                "env": [
+                  {
+                    "name": "db_name",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "database-name",
+                        "name": "mysql"
+                      }
+                    }
+                  },
+                  {
+                    "name": "db_username",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "database-user",
+                        "name": "mysql"
+                      }
+                    }
+                  },
+                  {
+                    "name": "db_password",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "key": "database-password",
+                        "name": "mysql"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+        
+      }
+      
+    },
+    {
+            "kind": "Service",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "openshift-mysql",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "openshift-mysql"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "8080-tcp",
+                        "protocol": "TCP",
+                        "port": 8080,
+                        "targetPort": 8080
+                    },
+                    {
+                        "name": "8443-tcp",
+                        "protocol": "TCP",
+                        "port": 8443,
+                        "targetPort": 8443
+                    },
+                    {
+                        "name": "8778-tcp",
+                        "protocol": "TCP",
+                        "port": 8778,
+                        "targetPort": 8778
+                    }
+                ],
+                "selector": {
+                    "app": "openshift-mysql",
+                    "deploymentconfig": "openshift-mysql"
+                }
+            }
+        }
+  ]
+}
