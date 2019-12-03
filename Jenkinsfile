@@ -21,13 +21,13 @@ pipeline {
 
   // Using Maven build the war file
   // Do not run tests in this step 
-  stage('Build Artifact') {
+/*  stage('Build Artifact') {
    steps {
      bat "${mvn} clean install -DskipTests=true"
 
      archive 'target/*.jar'
    }
-  }
+  }*/
 
   /*// Using Maven run the unit tests
   stage('Unit Tests') {
@@ -53,7 +53,7 @@ pipeline {
    }
   }*/
 
-  stage('Deploy on Openshift?') {
+ /* stage('Deploy on Openshift?') {
    steps {
     timeout(time: 2, unit: 'DAYS') {
      input message: 'Do you want to Approve?'
@@ -121,7 +121,7 @@ pipeline {
      input message: "Promote to Production?", ok: "Promote"
     }
    }
-  }
+  }*/
 
   stage('Deploy in Production') {
    steps {
