@@ -62,7 +62,7 @@ pipeline {
   }
   stage('Openshift New Build') {
    steps {
-    bat 'oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify'
+    bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
 
     sh 'oc project ${DEV_NAME}'
 
