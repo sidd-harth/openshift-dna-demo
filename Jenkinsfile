@@ -110,7 +110,7 @@ pipeline {
      },
      "Content String": {
       // sh 'sleep 20s'
-      bat "curl -s http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/check | grep 'Service UP & RUNNING!'"
+      bat "curl -s http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/check | grep 'Service UP and RUNNING'"
      }
     )
    }
