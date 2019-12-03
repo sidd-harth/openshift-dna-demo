@@ -29,7 +29,7 @@ pipeline {
    }
   }
 
-  // Using Maven run the unit tests
+  /*// Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
      bat "${mvn} test"
@@ -51,7 +51,7 @@ pipeline {
      bat "${mvn} deploy -DskipTests=true"
     
    }
-  }
+  }*/
 
   stage('Deploy on Openshift?') {
    steps {
@@ -83,7 +83,7 @@ pipeline {
    steps {
     //sh "pwd" 
     //sh " curl -O -X GET -u admin:admin123 http://localhost:8081/repository/snapshot/com/openshift/test/openshift-jenkins/0.0.1-SNAPSHOT/openshift-jenkins-0.0.1-20180214.210246-15.jar "
-    bat "rm -rf oc-build && mkdir -p oc-build/deployments"
+    sh "rm -rf oc-build && mkdir -p oc-build/deployments"
    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
 	bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
 
