@@ -128,7 +128,9 @@ pipeline {
     // tag for stage
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
      // clean up. keep the imagestream
-    bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
+    //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
+    bat "oc delete all -l app=${APP_NAME} -n ${PROD_NAME}"
+     
      // deploy stage image
     bat "oc project ${PROD_NAME}"
     //bat """oc new-app ${APP_NAME}:${env.BUILD_ID} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -"""
