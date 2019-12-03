@@ -75,7 +75,7 @@ pipeline {
 	              
 
 
-   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true"
+   bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
    }
   }
 
