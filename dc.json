@@ -1,0 +1,104 @@
+{
+  "kind": "DeploymentConfig",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "${APP_NAME}",
+    "creationTimestamp": null,
+    "labels": {
+      "app": "${APP_NAME}"
+    },
+    "annotations": {
+      "openshift.io/generated-by": "OpenShiftNewApp"
+    }
+  },
+  "spec": {
+    "strategy": {
+      "resources": {
+        
+      }
+    },
+    "triggers": [
+      {
+        "type": "ConfigChange"
+      },
+      {
+        "type": "ImageChange",
+        "imageChangeParams": {
+          "automatic": true,
+          "containerNames": [
+            "${APP_NAME}"
+          ],
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "${PROJECT_NAME}",
+            "name": "${APP_NAME}:${BUILD_NUMBER}"
+          }
+        }
+      }
+    ],
+    "replicas": 1,
+    "test": false,
+    "selector": {
+      "app": "${APP_NAME}",
+      "deploymentconfig": "${APP_NAME}"
+    },
+    "template": {
+      "metadata": {
+        "creationTimestamp": null,
+        "labels": {
+          "app": "${APP_NAME}",
+          "deploymentconfig": "${APP_NAME}"
+        },
+        "annotations": {
+          "openshift.io/generated-by": "OpenShiftNewApp"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "db_name",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "database-name",
+                    "name": "mysql"
+                  }
+                }
+              },
+              {
+                "name": "db_username",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "database-user",
+                    "name": "mysql"
+                  }
+                }
+              },
+              {
+                "name": "db_password",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "database-password",
+                    "name": "mysql"
+                  }
+                }
+              }
+            ],
+            "name": "${APP_NAME}",
+            "image": "172.30.1.1:5000/${PROJECT_NAME}/${APP_NAME}:${BUILD_NUMBER}",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              
+            }
+          }
+        ]
+      }
+    }
+  }
+}
