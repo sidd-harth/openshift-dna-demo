@@ -93,9 +93,9 @@ pipeline {
   stage('Deploy in Development') {
    steps {
     //sh 'oc new-app ${APP_NAME}'
-    bat """oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | \
-        oc apply --filename -"""
+    //bat "oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -"
     // create service from github raw
+    bat "oc new-app -f $WORKSPACE/deploymentConfig.json"
     bat "oc create svc -f $WORKSPACE/service.json"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 60s"
