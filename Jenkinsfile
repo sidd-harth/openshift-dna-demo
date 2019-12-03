@@ -135,7 +135,7 @@ pipeline {
      
      // deploy stage image
     
-    bat "oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq \".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databasename\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databaseuser\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databasepassword\",\"name\":\"mysql\"}}}]\"  |  oc apply --filename -"
+    bat "oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq —-arg \".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databasename\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databaseuser\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"databasepassword\",\"name\":\"mysql\"}}}]\"  |  oc apply --filename -"
      // create service from github raw
        // bat "oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} -f $WORKSPACE/template.json"
 
