@@ -63,7 +63,7 @@ pipeline {
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
-bat "oc login -u system:admin"
+//bat "oc login -u system:admin -n ${DEV_NAME} --insecure-skip-tls-verify"
     bat "oc project ${DEV_NAME}"
 
   bat "oc delete all -l app=${APP_NAME}"
