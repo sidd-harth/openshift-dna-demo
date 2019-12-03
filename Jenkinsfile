@@ -23,7 +23,7 @@ pipeline {
   // Do not run tests in this step 
   stage('Build Artifact') {
    steps {
-     bat "mvn clean install -DskipTests=true"
+     bat "${mvn} clean install -DskipTests=true"
 
      archive 'target/*.jar'
    }
@@ -32,14 +32,14 @@ pipeline {
   // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
-     bat "mvn test"
+     bat "${mvn} test"
    }
   }
 
   // Using Maven call SonarQube for Code Analysis
   stage('Sonar Code Analysis') {
    steps {
-     bat "mvn sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
+     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
     }
    
   }
@@ -48,7 +48,7 @@ pipeline {
   stage('Publish to Nexus Repository') {
    steps {
 
-     bat "mvn deploy -DskipTests=true"
+     bat "${mvn} deploy -DskipTests=true"
     
    }
   }
@@ -93,8 +93,8 @@ pipeline {
   stage('Deploy in Development') {
    steps {
     //sh 'oc new-app ${APP_NAME}'
-    sh 'oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | \
-        oc apply --filename -'
+    sh '''oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | \
+        oc apply --filename -'''
     // create service from github raw
     sh 'oc create svc -f $WORKSPACE/service.json'  
     sh 'oc expose svc/${APP_NAME}'
@@ -131,7 +131,7 @@ pipeline {
    // sh 'oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}'
      // deploy stage image
     sh "oc project ${PROD_NAME}"
-    sh 'oc new-app ${APP_NAME}:${env.BUILD_ID} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -'
+    sh '''oc new-app ${APP_NAME}:${env.BUILD_ID} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -'''
      // create service from github raw
     sh 'oc create svc -f $WORKSPACE/service.json'
     sh 'oc expose svc/${APP_NAME} -n ${PROD_NAME}'
