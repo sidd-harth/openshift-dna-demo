@@ -106,11 +106,11 @@ pipeline {
     parallel(
      "Status Code": {
       // sh 'sleep 20s'
-      bat "curl -I -s -L http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/api/info | grep 200"
+      bat "curl -I -s -L http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/api/info | grep 200"
      },
      "Content String": {
       // sh 'sleep 20s'
-      bat "curl -s http://${APP_NAME}-${DEV_NAME}.192.168.99.100.nip.io/check | grep 'Service UP & RUNNING!'"
+      bat "curl -s http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/check | grep 'Service UP & RUNNING!'"
      }
     )
    }
