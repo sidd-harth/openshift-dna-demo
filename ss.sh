@@ -1,2 +1,2 @@
 #!/bin/bash
-oc get all
+oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq ".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-name\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-user\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-password\",\"name\":\"mysql\"}}}]" |  oc apply --filename -
