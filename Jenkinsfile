@@ -103,9 +103,9 @@ stage('Deploy on Openshift?') {
    // bat "oc create svc -f $WORKSPACE/service.json"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 60s"
-   } /* 
+   }
   }
-  stage('Integration Tests') {
+ /*   stage('Integration Tests') {
    steps {
     parallel(
      "Status Code": {
