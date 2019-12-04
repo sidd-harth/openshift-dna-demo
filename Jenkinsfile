@@ -127,17 +127,17 @@ pipeline {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
     bat "oc project ${PROD_NAME}"
-    bat "sh && sh ss.sh"
+
     // tag for stage
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
      // clean up. keep the imagestream
     //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
     
     bat "oc delete all -l app=${APP_NAME}"
-     
+      bat "sh && sh ss.sh"
      // deploy stage image
     //bat "oc create -f ${WORKSPACE}/dc.json --env=APP_NAME=${APP_NAME}"
-    bat """oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq ".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-name\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-user\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-password\",\"name\":\"mysql\"}}}]" |  oc apply --filename -"""
+    //bat """oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq ".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-name\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-user\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-password\",\"name\":\"mysql\"}}}]" |  oc apply --filename -"""
      // create service from github raw
        // bat "oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} -f $WORKSPACE/template.json"
 
