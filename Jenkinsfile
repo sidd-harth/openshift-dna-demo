@@ -51,7 +51,7 @@ pipeline {
      bat "${mvn} deploy -DskipTests=true"
     
    }
-  }*/
+  }
 
 stage('Deploy on Openshift?') {
    steps {
@@ -59,7 +59,7 @@ stage('Deploy on Openshift?') {
      input message: 'Do you want to Approve?'
     }
    }
-  }
+  }*/
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
@@ -77,7 +77,7 @@ stage('Deploy on Openshift?') {
 
 
    //bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
-   bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
+   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
 
    }
   }
@@ -90,7 +90,7 @@ stage('Deploy on Openshift?') {
    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
 	bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
 
-    bat "oc start-build ${APP_NAME}-${env.BUILD_ID}  --from-dir=oc-build --wait=true  --follow"
+    bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
   }
 
@@ -120,14 +120,14 @@ stage('Deploy on Openshift?') {
     )
    }
   }
-  stage('Promote to Production?') {
+/*  stage('Promote to Production?') {
    steps {
     timeout(time: 2, unit: 'DAYS') {
      input message: "Promote to Production?", ok: "Promote"
     }
    }
   }
-
+*/
   stage('Deploy in Production') {
    steps {
     //bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
@@ -137,7 +137,7 @@ stage('Deploy on Openshift?') {
     //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
    bat "oc delete all -l app=${APP_NAME}"
     bat "oc new-app -f $WORKSPACE/template.json"
-        bat "oc tag ${DEV_NAME}/${APP_NAME}-${env.BUILD_ID}:latest ${PROD_NAME}/${APP_NAME}-${env.BUILD_ID}:latest"
+        bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:latest"
 
      // clean up. keep the imagestream
     //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
