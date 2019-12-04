@@ -1,0 +1,51 @@
+oc new-app ppp/openshift-mysql:22 | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -
+
+
+oc tag db2/openshift-mysql:latest a1/openshift-mysql:latest
+oc policy add-role-to-group system:image-puller system:serviceaccounts:a1 -n db2
+
+
+oc new-app a1/openshift-mysql:latest --output=json --dry-run=true | \
+jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]'  | \
+oc apply --filename -
+
+
+oc new-build redhat-openjdk18-openshift~https://github.com/sidd-harth/openshift-mysql 
+
+
+oc set triggers dc openshift-mysql --from-image=openshift-mysql:latest --containers=openshift-mysql
+
+
+oc new-build redhat-openjdk18-openshift~https://github.com/sidd-harth/openshift-mysql
+
+oc new-app redhat-openjdk18-openshift~https://github.com/sidd-harth/openshift-mysql --output=json --dry-run=true | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -
+
+
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
+
+
+
+DROP TABLE `employees`;
+
+CREATE TABLE `employees` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `city` varchar(255),
+  PRIMARY KEY (`id`)
+) AUTO_INCREMENT=1;
+
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("dev-Siddharth",1,"Hyderabad"),("dev-Navaneetha",2,"Bangalore"),("dev-Srikanth",3,"Chennai"),("dev-Rishabh",4,"Noida"),("dev-Lakshmikanth",5,"Bangalore");
+
+
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Siddharth",1,"Hyderabad"),("Navaneetha",2,"Bangalore"),("Srikanth",3,"Chennai"),("Rishabh",4,"Noida"),("Lakshmikanth",5,"Bangalore"),("Vinutha",6,"Bangalore"),("Rajiv",7,"Bangalore"),("Arvind",8,"Bangalore"),("Radha",9,"Bangalore"),("Veena",10,"Bangalore");
+
+
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Kato",11,"Sombreffe"),("Kadeem",12,"Arviat"),("Kameko",13,"Los Muermos"),("Channing",14,"Poitiers"),("Kirk",15,"Springdale"),("Kibo",16,"Whitehorse"),("Kane",17,"King Township"),("Irma",18,"Dabgram"),("Finn",19,"Petrópolis"),("Larissa",20,"Chandler");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Pearl",21,"Talara"),("Buckminster",22,"West Valley City"),("Elijah",23,"Sherani"),("Arden",24,"Veraval"),("Oleg",25,"Charleville-Mézières"),("Remedios",26,"Mosciano Sant'Angelo"),("Kasper",27,"Dover"),("Dorothy",28,"Barra do Corda"),("Colby",29,"Palmerston"),("Blaine",30,"Vologda");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Callum",31,"Bay Roberts"),("Malachi",32,"Stourbridge"),("Ashely",33,"Tübingen"),("Ariana",34,"Arnhem"),("Chloe",35,"Chiaromonte"),("Taylor",36,"Couture-Saint-Germain"),("Shoshana",37,"Kapiti"),("Jared",38,"Yungay"),("Colorado",39,"Osan"),("Russell",40,"Hoyerswerda");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Hanna",41,"Tarsus"),("Acton",42,"Sundrie"),("Madison",43,"Sonipat"),("Arden",44,"SŽlange"),("Yael",45,"Wondelgem"),("Wanda",46,"Zolder"),("William",47,"Curarrehue"),("Chaney",48,"Laarne"),("Uriah",49,"Toltén"),("Victoria",50,"Fermont");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Deborah",51,"Oria"),("Jayme",52,"Nemi"),("Carlos",53,"Tramutola"),("Iliana",54,"Bahraich"),("Mohammad",55,"Giarratana"),("Brock",56,"Sint-Michiels"),("Willow",57,"Vernole"),("Alexander",58,"Concón"),("Tate",59,"San José de Alajuela"),("Cedric",60,"Dreieich");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Jamalia",61,"Fiuminata"),("Porter",62,"Deschambault"),("Jaime",63,"Sint-Joost-ten-Node"),("Natalie",64,"Pabianice"),("Jaime",65,"Izmir"),("Dieter",66,"Roccabruna"),("Cheyenne",67,"Aalen"),("Samuel",68,"Bhilai"),("Kiara",69,"Stevoort"),("Josephine",70,"Flint");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Madonna",71,"Peñalolén"),("Emery",72,"HŽron"),("Otto",73,"Calama"),("Alma",74,"Town of Yarmouth"),("Thor",75,"Siliguri"),("Connor",76,"Novodvinsk"),("Raja",77,"Carovilli"),("Cooper",78,"Sint-Stevens-Woluwe"),("Porter",79,"Lavoir"),("Indira",80,"Stonehaven");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Emerson",81,"Rotorua"),("Darryl",82,"Shebekino"),("Magee",83,"Dyatkovo"),("Rajah",84,"Campochiaro"),("Ian",85,"Bastogne"),("Elton",86,"Cincinnati"),("Alana",87,"Lumaco"),("Justina",88,"Pollena Trocchia"),("Rana",89,"Oordegem"),("Ulric",90,"Sankt Ingbert");
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Magee",91,"Mathura"),("Vivian",92,"Bloxham"),("Robert",93,"Göteborg"),("Ray",94,"North Cowichan"),("Iona",95,"Lokeren"),("Damian",96,"Campbellton"),("Colt",97,"Wandsworth"),("Sybil",98,"Chanco"),("Hanae",99,"Höchst"),("Geoffrey",100,"Gespeg");
