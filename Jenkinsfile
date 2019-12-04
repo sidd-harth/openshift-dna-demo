@@ -93,7 +93,7 @@ stage('Deploy on Openshift?') {
    }
   }
 
-   /* 
+  
   stage('Deploy in Development') {
    steps {
     //sh 'oc new-app ${APP_NAME}'
@@ -103,7 +103,7 @@ stage('Deploy on Openshift?') {
    // bat "oc create svc -f $WORKSPACE/service.json"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 60s"
-   }
+   } /* 
   }
   stage('Integration Tests') {
    steps {
