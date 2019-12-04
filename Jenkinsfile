@@ -67,6 +67,7 @@ stage('Deploy on Openshift?') {
     bat "oc project ${DEV_NAME}"
 
   bat "oc delete all -l app=${APP_NAME}"
+  //bat "oc delete all -l app=${APP_NAME}-${env.BUILD_ID}"
      // clean up. keep the imagestream
      //sh 'oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${DEV_NAME}'
 
@@ -76,7 +77,7 @@ stage('Deploy on Openshift?') {
 
 
    //bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
-   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
+   bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
 
    }
   }
@@ -136,7 +137,7 @@ stage('Deploy on Openshift?') {
     //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
    bat "oc delete all -l app=${APP_NAME}"
     bat "oc new-app -f $WORKSPACE/template.json"
-        bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:latest"
+        bat "oc tag ${DEV_NAME}/${APP_NAME}-${env.BUILD_ID}:latest ${PROD_NAME}/${APP_NAME}:latest"
 
      // clean up. keep the imagestream
     //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
