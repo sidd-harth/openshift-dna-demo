@@ -89,7 +89,7 @@ stage('Deploy on Openshift?') {
    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
 	bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
 
-    bat "oc start-build ${APP_NAME} -l app=${APP_NAME} --from-dir=oc-build --wait=true  --follow"
+    bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
   }
 
