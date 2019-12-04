@@ -134,6 +134,7 @@ stage('Deploy on Openshift?') {
 
     // tag for stage
     //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
+   bat "oc delete all -l app=${APP_NAME}"
     bat "oc new-app -f $WORKSPACE/template.json"
         bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:latest"
 
