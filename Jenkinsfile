@@ -125,7 +125,7 @@ stage('Deploy on Openshift?') {
      input message: "Promote to Production?", ok: "Promote"
     }
    }
-  }*/
+  }
 
   stage('Deploy in Production') {
    steps {
@@ -147,7 +147,7 @@ stage('Deploy on Openshift?') {
 
     //bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
-  }
+  }*/
 
   stage('Scaling Application') {
    steps {
