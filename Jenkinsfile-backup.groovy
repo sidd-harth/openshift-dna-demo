@@ -1,3 +1,8 @@
+// this is working JEnkinsfile
+//
+//
+//
+
 def mvn = "mvn -s nexusconfigurations/nexus.xml"
 
 pipeline {
@@ -28,7 +33,7 @@ pipeline {
     archive 'target/*.jar'
    }
   }
-  
+
   /*// Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
@@ -41,12 +46,15 @@ pipeline {
    steps {
      bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
     }
+   
   }
 
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
+
      bat "${mvn} deploy -DskipTests=true"
+    
    }
   }
 
@@ -60,8 +68,20 @@ stage('Deploy on Openshift?') {
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
+    //bat "oc login -u system:admin -n ${DEV_NAME} --insecure-skip-tls-verify"
     bat "oc project ${DEV_NAME}"
+
     bat "oc delete all -l app=${APP_NAME}"
+    //bat "oc delete all -l app=${APP_NAME}-${env.BUILD_ID}"
+    // clean up. keep the imagestream
+    //sh 'oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${DEV_NAME}'
+
+    // create build. override the exit code since it complains about exising imagestream
+    // sh "oc new-build --name=${APP_NAME} --image-stream=redhat-openjdk18-openshift --binary=true --labels=app=${APP_NAME} -n ${DEV_NAME} || true"
+
+
+
+    //bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
     bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
 
    }
@@ -69,15 +89,24 @@ stage('Deploy on Openshift?') {
 
   stage('Openshift Start Build') {
    steps {
+    //sh "pwd" 
+    //sh " curl -O -X GET -u admin:admin123 http://localhost:8081/repository/snapshot/com/openshift/test/openshift-jenkins/0.0.1-SNAPSHOT/openshift-jenkins-0.0.1-20180214.210246-15.jar "
     sh "rm -rf oc-build && mkdir -p oc-build/deployments"
+    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
     bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
+
     bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
   }
 
+
   stage('Deploy in Development') {
    steps {
+    //sh 'oc new-app ${APP_NAME}'
+    //bat "oc new-app ${APP_NAME} | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -"
+    // create service from github raw
     bat "oc new-app -f $WORKSPACE/template-prod.yaml"
+    // bat "oc create svc -f $WORKSPACE/service.json"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 30s"
    }
@@ -86,9 +115,11 @@ stage('Deploy on Openshift?') {
    steps {
     parallel(
      "Status Code": {
+      // sh 'sleep 20s'
       bat "curl -I -s -L http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/api/info | grep 200"
      },
      "Content String": {
+      // sh 'sleep 20s'
       bat "curl -s http://${APP_NAME}-${DEV_NAME}.35.244.32.156.nip.io/api/info | grep 'Service UP and RUNNING'"
      }
     )
@@ -104,10 +135,26 @@ stage('Deploy on Openshift?') {
   */
   stage('Deploy in Production') {
    steps {
+    //bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
     bat "oc project ${PROD_NAME}"
+
+    // tag for stage
+    //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
     bat "oc delete all -l app=${APP_NAME}"
     bat "oc new-app -f $WORKSPACE/template-prod.yaml"
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:prod"
+
+    // clean up. keep the imagestream
+    //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
+
+    // bat "oc delete all -l app=${APP_NAME}"
+    // bat "sh && sh ss.sh"
+    // deploy stage image
+    //bat "oc create -f ${WORKSPACE}/dc.json --env=APP_NAME=${APP_NAME}"
+    //bat """oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq ".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-name\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-user\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-password\",\"name\":\"mysql\"}}}]" |  oc apply --filename -"""
+    // create service from github raw
+    // bat "oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} -f $WORKSPACE/template.json"
+
     bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
   }
@@ -117,5 +164,6 @@ stage('Deploy on Openshift?') {
     bat "oc scale --replicas=${SCALE_APP} dc ${APP_NAME} -n ${PROD_NAME}"
    }
   }
+
  }
 }
