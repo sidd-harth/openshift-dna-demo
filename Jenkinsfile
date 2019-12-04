@@ -28,7 +28,7 @@ pipeline {
     archive 'target/*.jar'
    }
   }
-  
+
   /*// Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
@@ -77,7 +77,7 @@ stage('Deploy on Openshift?') {
 
   stage('Deploy in Development') {
    steps {
-    bat "oc new-app -f $WORKSPACE/template-prod.yaml"
+    bat "oc new-app -f $WORKSPACE/template-dev.yaml"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 30s"
    }
