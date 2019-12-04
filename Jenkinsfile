@@ -127,6 +127,7 @@ pipeline {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
     bat "oc project ${PROD_NAME}"
+    bat "sh && sh ss.sh"
     // tag for stage
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
      // clean up. keep the imagestream
