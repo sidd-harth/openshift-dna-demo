@@ -76,7 +76,7 @@ stage('Deploy on Openshift?') {
 
 
    //bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
-   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true"
+   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true -l app=${APP_NAME}"
 
    }
   }
@@ -89,7 +89,7 @@ stage('Deploy on Openshift?') {
    // sh "cp ./openshift-jenkins-0.0.1-20180214.210246-15.jar oc-build/deployments/ROOT.jar"
 	bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
 
-    bat "oc start-build ${APP_NAME} --from-dir=oc-build --wait=true  --follow"
+    bat "oc start-build ${APP_NAME} -l app=${APP_NAME} --from-dir=oc-build --wait=true  --follow"
    }
   }
 
@@ -105,7 +105,7 @@ stage('Deploy on Openshift?') {
     bat "sleep 60s"
    }
   }
- /*   stage('Integration Tests') {
+   stage('Integration Tests') {
    steps {
     parallel(
      "Status Code": {
@@ -129,16 +129,18 @@ stage('Deploy on Openshift?') {
 
   stage('Deploy in Production') {
    steps {
-    bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
+    //bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
     bat "oc project ${PROD_NAME}"
 
     // tag for stage
-    bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
+    //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
+        bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:latest"
+
      // clean up. keep the imagestream
     //bat "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${PROD_NAME}"
     
-    bat "oc delete all -l app=${APP_NAME}"
-      bat "sh && sh ss.sh"
+   // bat "oc delete all -l app=${APP_NAME}"
+     // bat "sh && sh ss.sh"
      // deploy stage image
     //bat "oc create -f ${WORKSPACE}/dc.json --env=APP_NAME=${APP_NAME}"
     //bat """oc new-app ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID} --output=json --dry-run=true | jq ".items[] | select(.kind == \"DeploymentConfig\") | .spec.template.spec.containers[0].env += [{\"name\":\"db_name\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-name\",\"name\":\"mysql\"}}},{\"name\":\"db_username\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-user\",\"name\":\"mysql\"}}},{\"name\":\"db_password\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"database-password\",\"name\":\"mysql\"}}}]" |  oc apply --filename -"""
@@ -147,7 +149,7 @@ stage('Deploy on Openshift?') {
 
     //bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
-  }*/
+  }
 
   stage('Scaling Application') {
    steps {
