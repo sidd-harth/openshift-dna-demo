@@ -21,13 +21,13 @@ pipeline {
 
   // Using Maven build the war file
   // Do not run tests in this step 
-/*  stage('Build Artifact') {
+  stage('Build Artifact') {
    steps {
      bat "${mvn} clean install -DskipTests=true"
 
      archive 'target/*.jar'
    }
-  }*/
+  }
 
   /*// Using Maven run the unit tests
   stage('Unit Tests') {
@@ -53,7 +53,7 @@ pipeline {
    }
   }*/
 
- /* stage('Deploy on Openshift?') {
+stage('Deploy on Openshift?') {
    steps {
     timeout(time: 2, unit: 'DAYS') {
      input message: 'Do you want to Approve?'
@@ -75,7 +75,9 @@ pipeline {
 	              
 
 
-   bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
+   //bat "oc new-build --name=${APP_NAME}-${env.BUILD_ID} redhat-openjdk18-openshift --binary=true"
+   bat "oc new-build --name=${APP_NAME} redhat-openjdk18-openshift --binary=true"
+
    }
   }
 
@@ -90,6 +92,8 @@ pipeline {
     bat "oc start-build ${APP_NAME} --from-dir=oc-build --wait=true  --follow"
    }
   }
+
+   /* 
   stage('Deploy in Development') {
    steps {
     //sh 'oc new-app ${APP_NAME}'
