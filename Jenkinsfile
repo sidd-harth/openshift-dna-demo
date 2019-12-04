@@ -105,8 +105,8 @@ stage('Deploy on Openshift?') {
   stage('Deploy in Production') {
    steps {
     bat "oc project ${PROD_NAME}"
-    //bat "oc delete all -l app=${APP_NAME}"
-    //bat "oc new-app -f $WORKSPACE/template-prod.yaml"
+    bat "oc delete all -l app=${APP_NAME}"
+    bat "oc new-app -f $WORKSPACE/template-prod.yaml"
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:prod"
     bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
