@@ -102,7 +102,7 @@ stage('Deploy on Openshift?') {
     bat "oc new-app -f $WORKSPACE/template.json"
    // bat "oc create svc -f $WORKSPACE/service.json"
     bat "oc expose svc/${APP_NAME}"
-    bat "sleep 60s"
+    bat "sleep 30s"
    }
   }
    stage('Integration Tests') {
@@ -134,6 +134,7 @@ stage('Deploy on Openshift?') {
 
     // tag for stage
     //bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:${env.BUILD_ID}"
+    bat "oc new-app -f $WORKSPACE/template.json"
         bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:latest"
 
      // clean up. keep the imagestream
