@@ -40,6 +40,7 @@ pipeline {
   stage('Sonar Code Analysis') {
    steps {
      bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
+// office login     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
     }
   }
 
