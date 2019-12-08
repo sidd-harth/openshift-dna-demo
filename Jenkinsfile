@@ -2,11 +2,11 @@ def mvn = "mvn -s nexusconfigurations/nexus.xml"
 
 pipeline {
  agent any
- tools {
+/* tools {
   maven 'M2'
   jdk 'JDK'
   nodejs 'NODEJS'
- }
+ } */
 
  stages {
   stage('Check Parameters') {
