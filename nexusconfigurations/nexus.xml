@@ -7,7 +7,7 @@
      </server>
   </servers>
 </servers> -->
-
+<settings>
  <servers>
      <server>
         <id>nexus-snapshot</id>
@@ -15,3 +15,4 @@
         <password>admin123</password>
      </server>
   </servers>
+</settings>
