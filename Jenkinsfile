@@ -71,7 +71,7 @@ stage('Deploy on Openshift?') {
 
   stage('Openshift Start Build') {
    steps {
-    bat "sh rm -rf oc-build && mkdir -p oc-build/deployments"
+    sh "rm -rf oc-build && mkdir -p oc-build/deployments"
     bat "cp target/openshift-jenkins-0.0.1-SNAPSHOT.jar oc-build/deployments/ROOT.jar"
     bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
