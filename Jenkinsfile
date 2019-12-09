@@ -44,13 +44,13 @@ pipeline {
     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
     }
   }
-*/
+
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
-     bat "mvn deploy -DskipTests=true"
+     bat "${mvn} deploy -DskipTests=true"
    }
-  }
+  } 
 
 stage('Deploy on Openshift?') {
    steps {
@@ -58,7 +58,7 @@ stage('Deploy on Openshift?') {
      input message: 'Do you want to Approve?'
     }
    }
-  }
+  } */
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
