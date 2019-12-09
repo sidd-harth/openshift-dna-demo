@@ -80,8 +80,8 @@ stage('Deploy on Openshift?') {
 
   stage('Deploy in Development') {
    steps {
-    //sh "oc new-app -f <(curl https://raw.githubusercontent.com/sidd-harth/openshift-dna-demo/master/template-dev.yaml?token=AG4V65QHES32UQQGTPW3FZ2552NMU)"
-    sh "oc new-app -f $WORKSPACE/template-dev.yaml"
+    sh "oc new-app -f '<(curl https://raw.githubusercontent.com/sidd-harth/openshift-dna-demo/master/template-dev.yaml?token=AG4V65QHES32UQQGTPW3FZ2552NMU)'"
+    //sh "oc new-app -f $WORKSPACE/template-dev.yaml"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 30s"
    }
