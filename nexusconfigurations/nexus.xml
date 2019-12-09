@@ -1,4 +1,4 @@
-<!-- <servers>
+ <servers>
   <servers>
      <server>
         <id>nexus-snapshot</id>
@@ -6,8 +6,9 @@
         <password>admin123</password>
      </server>
   </servers>
-</servers> -->
-<settings>
+</servers> 
+
+<!--<settings>
  <servers>
      <server>
         <id>nexus-snapshot</id>
@@ -15,4 +16,4 @@
         <password>admin123</password>
      </server>
   </servers>
-</settings>
+</settings> -->
