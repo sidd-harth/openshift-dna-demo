@@ -29,7 +29,7 @@ pipeline {
    }
   }
 
-  /*// Using Maven run the unit tests
+  // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
      bat "${mvn} test"
@@ -39,8 +39,9 @@ pipeline {
   // Using Maven call SonarQube for Code Analysis
   stage('Sonar Code Analysis') {
    steps {
-     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
-// office login     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
+    // bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=aab02659e091858dfd99ddace56d44c604390a52"
+// office login     
+    bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
     }
   }
 
@@ -57,7 +58,7 @@ stage('Deploy on Openshift?') {
      input message: 'Do you want to Approve?'
     }
    }
-  }*/
+  }
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
