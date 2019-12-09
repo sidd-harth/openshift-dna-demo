@@ -48,7 +48,7 @@ pipeline {
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
-     bat "${mvn} deploy -DskipTests=true"
+     bat "mvn deploy -DskipTests=true"
    }
   }
 
