@@ -80,7 +80,7 @@ stage('Deploy on Openshift?') {
 
   stage('Deploy in Development') {
    steps {
-    bat "oc new-app -f $WORKSPACE/template-dev.yaml"
+    bat "oc new-app -f <(curl https://raw.githubusercontent.com/sidd-harth/openshift-dna-demo/master/template-dev.yaml?token=AG4V65QHES32UQQGTPW3FZ2552NMU)"
     bat "oc expose svc/${APP_NAME}"
     bat "sleep 30s"
    }
@@ -109,7 +109,7 @@ stage('Deploy on Openshift?') {
    steps {
     bat "oc project ${PROD_NAME}"
     bat "oc delete all -l app=${APP_NAME}"
-    bat "oc new-app -f $WORKSPACE/template-prod.yaml"
+    bat "oc new-app -f <(curl https://raw.githubusercontent.com/sidd-harth/openshift-dna-demo/master/template-prod.yaml?token=AG4V65TONFC4W2HDW5CRNLK552NQW)"
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:prod"
     bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
