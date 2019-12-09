@@ -21,7 +21,7 @@ pipeline {
 
   // Using Maven build the war file
   // Do not run tests in this step 
-  stage('Build Artifact') {
+ /* stage('Build Artifact') {
    steps {
     bat "${mvn} clean install -DskipTests=true"
 
@@ -44,7 +44,7 @@ pipeline {
     bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
     }
   }
-
+*/
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
