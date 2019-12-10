@@ -21,7 +21,7 @@ pipeline {
 
   // Using Maven build the war file
   // Do not run tests in this step 
- /* stage('Build Artifact') {
+  stage('Build Artifact') {
    steps {
     bat "${mvn} clean install -DskipTests=true"
 
@@ -35,7 +35,7 @@ pipeline {
      bat "${mvn} test"
    }
   }
-
+/*
   // Using Maven call SonarQube for Code Analysis
   stage('Sonar Code Analysis') {
    steps {
