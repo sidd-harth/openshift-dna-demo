@@ -18,7 +18,7 @@ pipeline {
     echo "Number of Replicas - ${SCALE_APP}"
    }
   }
-/*
+
   // Using Maven build the war file
   // Do not run tests in this step 
   stage('Build Artifact') {
@@ -58,7 +58,7 @@ stage('Deploy on Openshift?') {
      input message: 'Do you want to Approve?'
     }
    }
-  } */
+  } 
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
@@ -98,7 +98,7 @@ stage('Deploy on Openshift?') {
     )
    }
   }
-  /* 
+   
    stage('Promote to Production?') {
      steps {
       timeout(time: 2, unit: 'DAYS') {
@@ -106,7 +106,7 @@ stage('Deploy on Openshift?') {
       }
      }
     }
-  */
+  
   stage('Deploy in Production') {
    steps {
     bat "oc project ${PROD_NAME}"
