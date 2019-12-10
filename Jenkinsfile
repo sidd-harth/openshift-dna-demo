@@ -86,7 +86,7 @@ stage('Deploy on Openshift?') {
     bat "sleep 30s"
    }
   }
-  stage('Integration Tests') {
+  /* stage('Integration Tests') {
    steps {
     parallel(
      "Status Code": {
@@ -98,7 +98,7 @@ stage('Deploy on Openshift?') {
     )
    }
   }
-  /*  stage('Promote to Production?') {
+   stage('Promote to Production?') {
      steps {
       timeout(time: 2, unit: 'DAYS') {
        input message: "Promote to Production?", ok: "Promote"
@@ -110,7 +110,7 @@ stage('Deploy on Openshift?') {
    steps {
     bat "oc project ${PROD_NAME}"
     bat "oc delete all -l app=${APP_NAME}"
-    sh  "oc new-app -f $WORKSPACE/template-prod.yaml"
+    bat "oc new-app -f $WORKSPACE/template-prod.yaml"
     bat "oc tag ${DEV_NAME}/${APP_NAME}:latest ${PROD_NAME}/${APP_NAME}:prod"
     bat "oc expose svc/${APP_NAME} -n ${PROD_NAME}"
    }
