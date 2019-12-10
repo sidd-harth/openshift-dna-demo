@@ -86,7 +86,7 @@ stage('Deploy on Openshift?') {
     bat "sleep 30s"
    }
   }
-  /* stage('Integration Tests') {
+  stage('Integration Tests') {
    steps {
     parallel(
      "Status Code": {
@@ -98,6 +98,7 @@ stage('Deploy on Openshift?') {
     )
    }
   }
+  /* 
    stage('Promote to Production?') {
      steps {
       timeout(time: 2, unit: 'DAYS') {
