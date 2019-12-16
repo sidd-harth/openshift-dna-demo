@@ -24,7 +24,7 @@ pipeline {
   // Do not run tests in this step 
   stage('Build Artifact') {
    steps {
-    sh "${mvnHome}/bin/mvn clean install -DskipTests=true"
+    sh "'${mvnHome}/bin/mvn' clean install -DskipTests=true"
 
     archive 'target/*.jar'
    }
@@ -33,7 +33,7 @@ pipeline {
   // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
-     sh "${mvnHome}/bin/mvn test"
+     sh "'${mvnHome}/bin/mvn' test"
    }
   }
 
