@@ -1,4 +1,4 @@
-def mvnHome 
+def mvnHome = "tool 'M3'"
 
 pipeline {
  agent any
@@ -11,8 +11,6 @@ pipeline {
  stages {
   stage('Check Parameters') {
    steps {
-    mvnHome = tool 'M3'
-    mvn = "${mvnHome}/bin/mvn -s nexusconfigurations/nexus.xml"
     echo "Production App Name - ${PROD_NAME}"
     echo "Application Name - ${APP_NAME}"
     echo "Development App Name - ${DEV_NAME}"
@@ -26,7 +24,7 @@ pipeline {
   // Do not run tests in this step 
   stage('Build Artifact') {
    steps {
-    bat "${mvn} clean install -DskipTests=true"
+    bat "${mvnHome}/bin/mvn clean install -DskipTests=true"
 
     archive 'target/*.jar'
    }
@@ -35,7 +33,7 @@ pipeline {
   // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
-     bat "${mvn} test"
+     bat "${mvnHome}/bin/mvn test"
    }
   }
 
@@ -46,14 +44,14 @@ pipeline {
 // office login     
    // bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
    //openshift sonar
-   bat "${mvn} sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
+   bat "${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
     }
   }
 
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
-     bat "${mvn} deploy -DskipTests=true -P nexus3"
+     bat "${mvnHome}/bin/mvn -s nexusconfigurations/nexus.xml deploy -DskipTests=true -P nexus3"
    }
   } 
 
