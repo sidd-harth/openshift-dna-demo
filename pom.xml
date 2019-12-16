@@ -125,16 +125,21 @@
         </repository>
     </repositories>-->
 
+   <repositories>
+        <repository>
+            <id>openshift-repository</id>
+            <url>https://mirror.openshift.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <repository>
-            <id>deployment</id>
-		<name>Nexus Releases</name>
-            <url>http://nexus:8081/nexus/content/repositories/releases</url>
+            <id>nexus</id>
+            <url>http://nexus:8081/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshot</id>
-		<name>Nexus Snapshot</name>
-            <url>http://nexus:8081/nexus/content/repositories/snapshots</url>
+            <id>nexus</id>
+            <url>http://nexus:8081/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
