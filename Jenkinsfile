@@ -1,4 +1,4 @@
-def mvnHome
+def mvnHome="mvn -s nexusconfigurations/nexus.xml"
 
 pipeline {
  agent any
@@ -24,7 +24,7 @@ pipeline {
   // Do not run tests in this step 
   stage('Build Artifact') {
    steps {
-    sh "mvn clean install -DskipTests=true"
+    sh "${mvnHome} clean install -DskipTests=true"
 
     archive 'target/*.jar'
    }
@@ -33,7 +33,7 @@ pipeline {
   // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
-     sh "mvn test"
+     sh "${mvnHome} test"
    }
   }
 
@@ -44,14 +44,14 @@ pipeline {
 // office login     
    // bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
    //openshift sonar
-   sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
+   sh "${mvnHome} sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
     }
   }
 
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
-     sh "mvn -s nexusconfigurations/nexus.xml deploy -DskipTests=true"
+    sh "${mvnHome} deploy -DskipTests=true"
    }
   } 
 
