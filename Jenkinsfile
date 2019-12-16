@@ -96,7 +96,7 @@ stage('Deploy on Openshift?') {
    }
   }
   
-  /*
+  
   stage('Integration Tests') {
    steps {
     parallel(
@@ -108,7 +108,7 @@ stage('Deploy on Openshift?') {
      }
     )
    }
-  } */
+  } 
    
    stage('Promote to Production?') {
      steps {
