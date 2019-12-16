@@ -19,6 +19,7 @@ pipeline {
    }
   }
 
+  /*
   // Using Maven build the war file
   // Do not run tests in this step 
   stage('Build Artifact') {
@@ -59,6 +60,8 @@ stage('Deploy on Openshift?') {
     }
    }
   } 
+  
+  */
   stage('Openshift New Build') {
    steps {
     bat "oc login ${MASTER_URL} --token=${OAUTH_TOKEN} --insecure-skip-tls-verify"
