@@ -72,6 +72,7 @@ stage('Deploy on Openshift?') {
    }
   }
 
+  /*
   stage('Openshift Start Build') {
    steps {
     sh "rm -rf oc-build && mkdir -p oc-build/deployments"
@@ -80,7 +81,16 @@ stage('Deploy on Openshift?') {
     bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
   }
-
+*/
+  stage('Manual Step') {
+     steps {
+      timeout(time: 2, unit: 'DAYS') {
+       input message: "Manual Step", ok: "Promote"
+      }
+     }
+    }
+  
+  
   stage('Deploy in Development') {
    steps {
     //sh "oc new-app -f '<(curl https://raw.githubusercontent.com/sidd-harth/openshift-dna-demo/master/template-dev.yaml)'"
