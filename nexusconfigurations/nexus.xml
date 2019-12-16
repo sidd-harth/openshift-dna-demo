@@ -1,38 +1,14 @@
-  <settings> 
-
+<settings>
     <servers>
         <server>
-             <id>nexus-snapshot</id>
+            <id>nexus</id>
             <username>deployment</username>
             <password>deployment123</password>
         </server>
     </servers>
-</settings> 
-<!-- use this for desktop cicd
-<servers>
-  <servers>
-     <server>
-        <id>nexus-snapshot</id>
-        <username>admin</username>
-        <password>admin123</password>
-     </server>
-  </servers>
-</servers> -->
-
-<!--<settings>
- <servers>
-     <server>
-        <id>nexus-snapshot</id>
-        <username>admin</username>
-        <password>admin123</password>
-     </server>
-  </servers>
-</settings> -->
-
-<!-- openshift cicd -->
-
-  <!--  <mirrors>
+    <mirrors>
         <mirror>
+      <!--This sends everything else to /public -->
             <id>nexus</id>
             <mirrorOf>*</mirrorOf>
             <url>http://nexus:8081/repository/maven-all-public/</url>
@@ -41,7 +17,8 @@
     <profiles>
         <profile>
             <id>nexus</id>
-     
+      <!--Enable snapshots for the built in central repo to direct -->
+      <!--all requests to nexus via the mirror -->
             <repositories>
                 <repository>
                     <id>central</id>
@@ -61,6 +38,7 @@
         </profile>
     </profiles>
     <activeProfiles>
+    <!--make the profile active all the time -->
         <activeProfile>nexus</activeProfile>
-    </activeProfiles> -->
-<!-- -->
+    </activeProfiles>
+</settings>
