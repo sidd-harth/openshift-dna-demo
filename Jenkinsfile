@@ -1,4 +1,4 @@
-def mvnHome = "tool 'M3'"
+def mvnHome
 
 pipeline {
  agent any
@@ -11,6 +11,7 @@ pipeline {
  stages {
   stage('Check Parameters') {
    steps {
+    mvnHome = tool 'M3'
     echo "Production App Name - ${PROD_NAME}"
     echo "Application Name - ${APP_NAME}"
     echo "Development App Name - ${DEV_NAME}"
