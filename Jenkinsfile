@@ -2,16 +2,15 @@ def mvnHome
 
 pipeline {
  agent any
-/* tools {
-  maven 'M2'
-  jdk 'JDK'
-  nodejs 'NODEJS'
- } */
+ tools {
+  maven 'M3'
+ // jdk 'JDK'
+ // nodejs 'NODEJS'
+ } 
 
  stages {
   stage('Check Parameters') {
    steps {
-    mvnHome = tool 'M3'
     echo "Production App Name - ${PROD_NAME}"
     echo "Application Name - ${APP_NAME}"
     echo "Development App Name - ${DEV_NAME}"
@@ -25,7 +24,7 @@ pipeline {
   // Do not run tests in this step 
   stage('Build Artifact') {
    steps {
-    sh "'${mvnHome}/bin/mvn' clean install -DskipTests=true"
+    sh "mvn clean install -DskipTests=true"
 
     archive 'target/*.jar'
    }
