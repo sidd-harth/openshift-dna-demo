@@ -44,7 +44,7 @@ pipeline {
 // office login     
    // bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
    //openshift sonar
-   sh "${mvnHome} sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
+   sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
     }
   }
 
