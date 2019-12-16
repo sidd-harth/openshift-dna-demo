@@ -26,8 +26,8 @@
     <servers>
         <server>
              <id>nexus-snapshot</id>
-            <username>admin</username>
-            <password>admin123</password>
+            <username>admasdsain</username>
+            <password>admsadasdin123</password>
         </server>
     </servers>
 </settings> 
