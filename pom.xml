@@ -117,22 +117,22 @@
             <name>Internal Snapshot Releases</name>
             <url>http://localhost:8081/repository/snapshot/</url>
         </snapshotRepository> 
-    </distributionManagement> -->
+    </distributionManagement> 
 <repositories>
         <repository>
             <id>openshift-repository</id>
             <url>https://mirror.openshift.com/nexus/content/groups/public</url>
         </repository>
-    </repositories>
+    </repositories>-->
 
     <distributionManagement>
         <repository>
-            <id>nexus</id>
-            <url>http://nexus:8081/content/repositories/releases</url>
+            <id>deployment</id>
+            <url>http://nexus:8081/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>nexus</id>
-            <url>http://nexus:8081/content/repositories/snapshots</url>
+            <id>nexus-snapshot</id>
+            <url>http://nexus:8081/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
