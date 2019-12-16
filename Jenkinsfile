@@ -33,7 +33,7 @@ pipeline {
   // Using Maven run the unit tests
   stage('Unit Tests') {
    steps {
-     sh "'${mvnHome}/bin/mvn' test"
+     sh "mvn test"
    }
   }
 
@@ -44,14 +44,14 @@ pipeline {
 // office login     
    // bat "${mvn} sonar:sonar -Dsonar.host.url=http://localhost:9000   -Dsonar.login=410469ab34867377f5f95d2c7e8a9a4d9339fbb2"
    //openshift sonar
-   sh "${mvnHome}/bin/mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
+   sh "mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000   -Dsonar.login=1383b6bf1d677e4bc4d56740c59c7b05132cabcd"
     }
   }
 
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
   stage('Publish to Nexus Repository') {
    steps {
-     sh "${mvnHome}/bin/mvn -s nexusconfigurations/nexus.xml deploy -DskipTests=true -P nexus3"
+     sh "mvn -s nexusconfigurations/nexus.xml deploy -DskipTests=true -P nexus3"
    }
   } 
 
