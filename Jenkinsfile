@@ -49,11 +49,11 @@ pipeline {
   }
 
   // Publish the latest war file to Nexus. This needs to go into <nexusurl>/repository/releases.
-  stage('Publish to Nexus Repository') {
+/*  stage('Publish to Nexus Repository') {
    steps {
     sh "${mvnHome} deploy -DskipTests=true"
    }
-  } 
+  }  */
 
 stage('Deploy on Openshift?') {
    steps {
@@ -95,6 +95,8 @@ stage('Deploy on Openshift?') {
     sh "sleep 30s"
    }
   }
+  
+  /*
   stage('Integration Tests') {
    steps {
     parallel(
@@ -106,7 +108,7 @@ stage('Deploy on Openshift?') {
      }
     )
    }
-  }
+  } */
    
    stage('Promote to Production?') {
      steps {
