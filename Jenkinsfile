@@ -58,7 +58,7 @@ pipeline {
 stage('Deploy on Openshift?') {
    steps {
     timeout(time: 2, unit: 'DAYS') {
-     input message: 'Do you want to Approve?'
+     input message: 'Deploy to Openshift?'
     }
    }
   } 
