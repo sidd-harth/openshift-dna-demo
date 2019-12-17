@@ -105,7 +105,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	<profiles>
+	<!-- <profiles>
 		<profile>
 			<id>nexus3</id>
 			<distributionManagement>
@@ -140,9 +140,9 @@
             <url>http://nexus:8081/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+	 -->
 	
-	
-	<!-- 
+	 
 <distributionManagement>
         <repository>
             <id>deployment</id>
@@ -155,5 +155,5 @@
             <url>http://localhost:8081/repository/snapshot/</url>
         </snapshotRepository> 
     </distributionManagement>
--->
+
 </project>
