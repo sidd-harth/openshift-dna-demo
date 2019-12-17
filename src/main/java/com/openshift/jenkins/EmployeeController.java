@@ -21,7 +21,7 @@ public class EmployeeController {
 
     @GetMapping("/info")
     public String info() {
-        return "Service UP and RUNNING v1.1";
+        return "Service UP and RUNNING v1.9.1";
     }
     
     @GetMapping("/employees")
