@@ -1,3 +1,40 @@
+
+oc delete dc mysql && oc delete svc mysql
+oc delete secret mysql && oc delete pvc mysql
+
+
+mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
+
+DROP TABLE `employees`;
+
+CREATE TABLE `employees` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `city` varchar(255),
+  PRIMARY KEY (`id`)
+) AUTO_INCREMENT=1;
+
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("dev-Siddharth",1,"Hyderabad"),("dev-Navaneetha",2,"Bangalore"),("dev-Srikanth",3,"Chennai"),("dev-Rishabh",4,"Noida"),("dev-Lakshmikanth",5,"Bangalore");
+
+
+INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Siddharth",1,"Hyderabad"),("Navaneetha",2,"Bangalore"),("Srikanth",3,"Chennai"),("Rishabh",4,"Noida"),("Lakshmikanth",5,"Bangalore"),("Vinutha",6,"Bangalore"),("Rajiv",7,"Bangalore"),("Arvind",8,"Bangalore"),("Radha",9,"Bangalore"),("Veena",10,"Bangalore");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 oc new-app ppp/openshift-mysql:22 | jq '.items[] | select(.kind == "DeploymentConfig") | .spec.template.spec.containers[0].env += [{"name":"db_name","valueFrom":{"secretKeyRef":{"key":"database-name","name":"mysql"}}},{"name":"db_username","valueFrom":{"secretKeyRef":{"key":"database-user","name":"mysql"}}},{"name":"db_password","valueFrom":{"secretKeyRef":{"key":"database-password","name":"mysql"}}}]' | oc apply --filename -
 
 
@@ -24,23 +61,27 @@ oc new-app redhat-openjdk18-openshift~https://github.com/sidd-harth/openshift-my
 ////////////////////////////////$%^&*()*&^%%$^%&^*()___(*&^&%$^%&^*(&)*()_)_()&(*^%&^^$&%^*&(*)(_)+(*)&(^*%&))////////////////////////
 oc create -f https://gist.githubusercontent.com/tqvarnst/3ca512b01b7b7c1a1da0532939350e23/raw/1973a8baf6e398f534613108e0ec5a774a76babe/openjdk-s2i-imagestream.json -n openshift
 
-mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
 
 
 
-DROP TABLE `employees`;
-
-CREATE TABLE `employees` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `name` varchar(255) default NULL,
-  `city` varchar(255),
-  PRIMARY KEY (`id`)
-) AUTO_INCREMENT=1;
-
-INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("dev-Siddharth",1,"Hyderabad"),("dev-Navaneetha",2,"Bangalore"),("dev-Srikanth",3,"Chennai"),("dev-Rishabh",4,"Noida"),("dev-Lakshmikanth",5,"Bangalore");
 
 
-INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Siddharth",1,"Hyderabad"),("Navaneetha",2,"Bangalore"),("Srikanth",3,"Chennai"),("Rishabh",4,"Noida"),("Lakshmikanth",5,"Bangalore"),("Vinutha",6,"Bangalore"),("Rajiv",7,"Bangalore"),("Arvind",8,"Bangalore"),("Radha",9,"Bangalore"),("Veena",10,"Bangalore");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 INSERT INTO `employees` (`name`,`id`,`city`) VALUES ("Kato",11,"Sombreffe"),("Kadeem",12,"Arviat"),("Kameko",13,"Los Muermos"),("Channing",14,"Poitiers"),("Kirk",15,"Springdale"),("Kibo",16,"Whitehorse"),("Kane",17,"King Township"),("Irma",18,"Dabgram"),("Finn",19,"Petrópolis"),("Larissa",20,"Chandler");
