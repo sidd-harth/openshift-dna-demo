@@ -101,8 +101,8 @@
 				        </rules>
 				    </configuration>
 				</execution> -->
-            </executions>  
-        </plugin>
+			    </executions>  
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -122,24 +122,6 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
-	<!--<distributionManagement>
-        <repository>
-            <id>deployment</id>
-            <name>Internal Releases</name>
-            <url>http://localhost:8081/repository/release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshot</id>
-            <name>Internal Snapshot Releases</name>
-            <url>http://localhost:8081/repository/snapshot/</url>
-        </snapshotRepository> 
-    </distributionManagement> 
-<repositories>
-        <repository>
-            <id>openshift-repository</id>
-            <url>https://mirror.openshift.com/nexus/content/groups/public</url>
-        </repository>
-    </repositories>-->
 
    <repositories>
         <repository>
@@ -158,4 +140,20 @@
             <url>http://nexus:8081/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+	
+	
+	<!-- 
+<distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>http://localhost:8081/repository/release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <name>Internal Snapshot Releases</name>
+            <url>http://localhost:8081/repository/snapshot/</url>
+        </snapshotRepository> 
+    </distributionManagement>
+-->
 </project>
