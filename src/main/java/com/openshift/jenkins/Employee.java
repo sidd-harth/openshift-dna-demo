@@ -1,6 +1,5 @@
 package com.openshift.jenkins;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
