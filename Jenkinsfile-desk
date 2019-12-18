@@ -72,7 +72,7 @@ stage('Deploy on Openshift?') {
    }
   }
 
-  /*
+  
   stage('Openshift Start Build') {
    steps {
     sh "rm -rf oc-build && mkdir -p oc-build/deployments"
@@ -81,7 +81,7 @@ stage('Deploy on Openshift?') {
     bat "oc start-build ${APP_NAME}  --from-dir=oc-build --wait=true  --follow"
    }
   }
-*/
+/*
   stage('Manual Step (Network Issue)') {
      steps {
       timeout(time: 2, unit: 'DAYS') {
@@ -89,7 +89,7 @@ stage('Deploy on Openshift?') {
       }
      }
     }
-  
+  */
   
   stage('Deploy in Development') {
    steps {
