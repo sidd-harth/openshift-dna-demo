@@ -1,6 +1,7 @@
 
-oc delete dc mysql && oc delete svc mysql
-oc delete secret mysql && oc delete pvc mysql
+oc project prod
+oc delete dc mysql && oc delete svc mysql && oc delete secret mysql && oc delete pvc mysql
+oc delete all -l app=openshift-mysql
 
 
 mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -h $HOSTNAME $MYSQL_DATABASE
