@@ -1,4 +1,4 @@
- 
+<!--  
 <servers>
   <servers>
      <server>
@@ -7,9 +7,9 @@
         <password>admin123</password>
      </server>
   </servers>
-</servers> 
+</servers>  -->
 
-<!-- <settings>
+<settings>
   <servers>
      <server>
         <id>nexus</id>
@@ -56,4 +56,3 @@
     <activeProfile>nexus</activeProfile>
   </activeProfiles>
 </settings>
- -->
